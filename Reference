@@ -1,0 +1,102 @@
+References
+
+///Original Oscilator.js//
+var React = require('react');
+
+
+var AudioContext = window.AudioContext || window.webkitAudioContext;
+var audioCtx = new AudioContext();
+
+
+// Set up the first oscillator
+var sourceA = audioCtx.createOscillator();
+var lowpassA = audioCtx.createBiquadFilter();
+var gainNodeA = audioCtx.createGain();
+
+// Connect the audio components
+// Source --> Filter --> Gain
+sourceA.connect(lowpassA);
+lowpassA.connect(gainNodeA);
+gainNodeA.connect(audioCtx.destination);
+
+// Set filter
+lowpassA.type = 'lowpass';
+
+// Silence source before it starts
+gainNodeA.gain.value = 0;
+
+// Start source output
+sourceA.start(0);
+
+var Oscillator = React.createClass({  
+
+  getInitialState: function() {
+    return {   
+      sourceAVolume: 0,
+      sourceAPreviousVolume: 0.5,
+    	sourceAPitch: 120,
+    	sourceAWaveType: 'sine',
+      lowpassACutoff: 500
+    }
+  },
+
+  changeSourceAOn: function(e) {
+    if (this.state.sourceAVolume === 0){
+      this.setState({sourceAVolume: this.state.sourceAPreviousVolume});
+    } else {
+      this.setState({sourceAPreviousVolume: this.state.sourceAVolume});
+      this.setState({sourceAVolume: 0});
+    }
+  },
+
+  changeSourceAVolume: function(e){
+    this.setState({sourceAVolume: Number(e.target.value)});
+  },
+
+  changeSourceAPitch: function(e) {
+    this.setState({sourceAPitch: Number(e.target.value)});
+  },
+  changeSourceAWaveType: function(e) {
+    if (document.getElementById('sine').checked){
+      this.setState({sourceAWaveType: 'sine'});
+    } else if (document.getElementById('triangle').checked) {
+      this.setState({sourceAWaveType: 'triangle'});
+    } else {
+      this.setState({sourceAWaveType: 'square'});
+    }
+  },
+
+  changeLowpassACutoff: function(e) {
+    this.setState({ lowpassACutoff: Number(e.target.value) }); 
+  },
+
+  render: function () {
+    gainNodeA.gain.value = this.state.sourceAVolume;
+  	sourceA.frequency.value = this.state.sourceAPitch;
+  	sourceA.type = this.state.sourceAWaveType;
+    lowpassA.frequency.value= this.state.lowpassACutoff;
+
+    return (
+    	<div>
+      
+        <button onClick = {this.changeSourceAOn}>Channel A On/Off</button>
+        <br />
+        <input type="radio" onChange = {this.changeSourceAWaveType} name="shape" id="sine" />Sine
+        <input type="radio" onChange = {this.changeSourceAWaveType} name="shape" id="triangle" />Triangle
+        <input type="radio" onChange = {this.changeSourceAWaveType} name="shape" id="square" />Square 
+        <br/>
+        Volume <input type="range"  min="0" max="1" step=".01" onChange = {this.changeSourceAVolume} />
+        <br />
+  	    Pitch <input type="range"  min="0" max="1000" defaultValue="120" onChange = {this.changeSourceAPitch} />
+        <br />
+        Cutoff Freq <input type="range"  min="0" max="1000" onChange = {this.changeLowpassACutoff}  />
+        <br />
+      </div>
+      );
+  }
+});
+
+module.exports = Oscillator;
+
+
+

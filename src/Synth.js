@@ -1,7 +1,8 @@
 var React = require('react');
-var Oscillators = require('./Oscillators')
+var Oscillator = require('./Oscillator')
 
-
+var AudioContext = window.AudioContext || window.webkitAudioContext;
+var audioCtx = new AudioContext();
 
 
 var Synth = React.createClass({
@@ -9,7 +10,10 @@ var Synth = React.createClass({
   render: function () {
     return (
     	<div>
-    	<Oscillators />
+	    	<Oscillator audioCtx={audioCtx} channel="A"/>
+	    	<br />
+	    	<Oscillator audioCtx={audioCtx} channel="B"/>
+
         </div>
       );
   }

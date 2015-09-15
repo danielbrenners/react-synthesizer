@@ -1,0 +1,33 @@
+Operator
+
+Oscillator 1:
+	Wave Type: Sine, Triangle, Sawtooth, Square
+	Coarse: Changes pitch up steps of 5ths (or 3rds?)
+	Fine: Changes pitch much more subtly
+	Level: Change volume
+	Attack, Decay, Sustain, Release
+
+Oscillator 2:
+	Coarse: Changes pitch up steps of 5ths (or 3rds?)
+	Fine: Changes pitch much more subtly
+	Level: Change volume
+	Attack, Decay, Sustain, Release
+
+Filter:
+	On or off
+	Filter type
+	Cutoff Frequency
+	Resonance
+
+
+LFO:
+	On or off
+	What does it modulate?
+	Wave type
+	Rate: Frequency of LFO
+	Amount: Amplitude of LFO
+
+
+
+
+
